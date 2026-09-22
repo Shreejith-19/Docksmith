@@ -170,7 +170,7 @@ any other instruction causes an immediate error with the line number.
 | `FROM` | `FROM alpine:3.18` | No |
 | `WORKDIR` | `WORKDIR /app` | No |
 | `ENV` | `ENV KEY=value` | No |
-| `COPY` | `COPY . /app/` | Yes |
+| `COPY` | `COPY . .` | Yes |
 | `RUN` | `RUN sh -c "echo hi"` | Yes |
 | `CMD` | `CMD ["sh", "/app/run.sh"]` | No |
 
@@ -184,7 +184,7 @@ WORKDIR /app
 ENV APP_VERSION=1.0.0
 ENV GREETING=Hello
 
-COPY . /app/
+COPY . .
 
 RUN sh -c "echo 'Build complete. Version: '${APP_VERSION}"
 
