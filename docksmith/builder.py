@@ -198,15 +198,25 @@ class Builder:
         return sorted(results.items(), key=lambda x: x[0])
 
     def _map_copy_dest(self, file_pairs: List[Tuple[str, str]], dest: str) -> List[Tuple[str, str]]:
+        is_dir = dest.endswith(("/", "/.", "/..")) or dest in (".", "..")
+        if not dest.startswith("/"):
+            base = self.workdir or "/"
+            dest = os.path.join(base, dest)
+            if is_dir and not dest.endswith("/"):
+                dest += "/"
+        elif is_dir and not dest.endswith("/"):
+            dest += "/"
+
         dest_clean = dest.lstrip("/")
+        dest_is_dir = dest.endswith("/") or is_dir
         multi      = len(file_pairs) > 1
         mapped     = []
         for rel_src, abs_src in file_pairs:
-            if dest.endswith("/") or multi:
+            if dest_is_dir or multi:
                 arcname = os.path.join(dest_clean, rel_src) if dest_clean else rel_src
             else:
                 arcname = dest_clean or Path(rel_src).name
-            arcname = os.path.normpath(arcname).lstrip("/")
+            arcname = os.path.normpath(arcname).replace("\\", "/").lstrip("/")
             mapped.append((arcname, abs_src))
         return mapped
 
