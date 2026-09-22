@@ -140,4 +140,4 @@ def _find_shell(rootfs: str) -> str:
 def _needs_shell(cmd: str) -> bool:
     """Does this command string require a shell to interpret?"""
     shell_chars = set("|&;<>()$`\\\"'{}[]!#~*?")
-    return any(c in cmd for c in shell_chars) or "  " in cmd or cmd.strip() != cmd.strip()
+    return any(c in cmd for c in shell_chars) or any(c.isspace() for c in cmd)
